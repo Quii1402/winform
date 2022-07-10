@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QLDSV1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tbl_khoa">
+    <Key>
+      <PropertyRef Name="MAKHOA" />
+    </Key>
+    <Property Name="MAKHOA" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="TENKHOA" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tbl_sinhvien" Relationship="Self.FK_tbl_sinhvien_tbl_khoa" FromRole="tbl_khoa" ToRole="tbl_sinhvien" />
+  </EntityType>
+  <EntityType Name="tbl_sinhvien">
+    <Key>
+      <PropertyRef Name="MASV" />
+    </Key>
+    <Property Name="MASV" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="HOVATEN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="GIOITINH" Type="Boolean" />
+    <Property Name="NGAYSINH" Type="DateTime" Precision="0" />
+    <Property Name="LOP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="MAKHOA" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="HOCKY" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="MONHOC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DIEMTHILAN1" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="DIEMTRUNGBINH" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="DIEMTONGKET" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="HANHKIEM" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="ANH" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="tbl_khoa" Relationship="Self.FK_tbl_sinhvien_tbl_khoa" FromRole="tbl_sinhvien" ToRole="tbl_khoa" />
+  </EntityType>
+  <Association Name="FK_tbl_sinhvien_tbl_khoa">
+    <End Role="tbl_khoa" Type="Self.tbl_khoa" Multiplicity="0..1" />
+    <End Role="tbl_sinhvien" Type="Self.tbl_sinhvien" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_khoa">
+        <PropertyRef Name="MAKHOA" />
+      </Principal>
+      <Dependent Role="tbl_sinhvien">
+        <PropertyRef Name="MAKHOA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QLDSV1Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="tbl_khoa" EntityType="Self.tbl_khoa" />
+    <EntitySet Name="tbl_sinhvien" EntityType="Self.tbl_sinhvien" />
+    <AssociationSet Name="FK_tbl_sinhvien_tbl_khoa" Association="Self.FK_tbl_sinhvien_tbl_khoa">
+      <End Role="tbl_khoa" EntitySet="tbl_khoa" />
+      <End Role="tbl_sinhvien" EntitySet="tbl_sinhvien" />
+    </AssociationSet>
+    <FunctionImport Name="GetAllStudent" ReturnType="Collection(QLDSV1Model.GetAllStudent_Result)" />
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_DeleteKhoa">
+      <Parameter Name="makhoap" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Deletestudent">
+      <Parameter Name="Masvp" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GetAllkhoa" ReturnType="Collection(QLDSV1Model.sp_GetAllkhoa_Result)" />
+    <FunctionImport Name="sp_GetAllStudent" ReturnType="Collection(QLDSV1Model.sp_GetAllStudent_Result)" />
+    <FunctionImport Name="sp_GetAllStudent1" ReturnType="Collection(QLDSV1Model.sp_GetAllStudent1_Result)" />
+    <FunctionImport Name="sp_GetKhoaIf" ReturnType="Collection(QLDSV1Model.sp_GetKhoaIf_Result)" />
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(QLDSV1Model.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(QLDSV1Model.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_InserKHOA">
+      <Parameter Name="makhoa" Mode="In" Type="String" />
+      <Parameter Name="tenkhoa" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_InserSinhvien">
+      <Parameter Name="Masvp" Mode="In" Type="String" />
+      <Parameter Name="Hovatenp" Mode="In" Type="String" />
+      <Parameter Name="Gioitinh" Mode="In" Type="Boolean" />
+      <Parameter Name="Ngaysinh" Mode="In" Type="DateTime" />
+      <Parameter Name="Lop" Mode="In" Type="String" />
+      <Parameter Name="Makhoa" Mode="In" Type="String" />
+      <Parameter Name="Hocky" Mode="In" Type="String" />
+      <Parameter Name="Monhoc" Mode="In" Type="String" />
+      <Parameter Name="Diemthilan1" Mode="In" Type="String" />
+      <Parameter Name="Diemtrungbinh" Mode="In" Type="String" />
+      <Parameter Name="Diemtongket" Mode="In" Type="String" />
+      <Parameter Name="Hanhkiem" Mode="In" Type="String" />
+      <Parameter Name="Anhp" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_TimkiemSinhvien" ReturnType="Collection(QLDSV1Model.sp_TimkiemSinhvien_Result)">
+      <Parameter Name="Masvp" Mode="In" Type="String" />
+      <Parameter Name="Hovatenp" Mode="In" Type="String" />
+      <Parameter Name="Lopp" Mode="In" Type="String" />
+      <Parameter Name="Makhoap" Mode="In" Type="String" />
+      <Parameter Name="Monhocp" Mode="In" Type="String" />
+      <Parameter Name="Hanhkiemp" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_TimkiemTenKhoa" ReturnType="Collection(QLDSV1Model.sp_TimkiemTenKhoa_Result)">
+      <Parameter Name="Tenkhoap" Mode="In" Type="String" />
+      <Parameter Name="Makhoap" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <FunctionImport Name="Update_Info_KHOA">
+      <Parameter Name="makhoa" Mode="In" Type="String" />
+      <Parameter Name="tenkhoa" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Update_Info_student1">
+      <Parameter Name="Masv_1" Mode="In" Type="String" />
+      <Parameter Name="Hovaten_1" Mode="In" Type="String" />
+      <Parameter Name="Gioitinh_1" Mode="In" Type="Boolean" />
+      <Parameter Name="Ngaysinh_1" Mode="In" Type="DateTime" />
+      <Parameter Name="Lop_1" Mode="In" Type="String" />
+      <Parameter Name="Makhoa_1" Mode="In" Type="String" />
+      <Parameter Name="Hocky_1" Mode="In" Type="String" />
+      <Parameter Name="Monhoc_1" Mode="In" Type="String" />
+      <Parameter Name="Diemthilan1_1" Mode="In" Type="String" />
+      <Parameter Name="Diemtrungbinh_1" Mode="In" Type="String" />
+      <Parameter Name="Diemtongket_1" Mode="In" Type="String" />
+      <Parameter Name="Hanhkiem_1" Mode="In" Type="String" />
+      <Parameter Name="Anh_1" Mode="In" Type="Binary" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="GetAllStudent_Result">
+    <Property Type="String" Name="MASV" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="HOVATEN" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="GIOITINH" Nullable="true" />
+    <Property Type="DateTime" Name="NGAYSINH" Nullable="true" />
+    <Property Type="String" Name="LOP" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MAKHOA" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HOCKY" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MONHOC" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DIEMTHILAN1" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTRUNGBINH" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTONGKET" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HANHKIEM" Nullable="true" MaxLength="10" />
+    <Property Type="Binary" Name="ANH" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+  <ComplexType Name="sp_GetAllkhoa_Result">
+    <Property Type="String" Name="MAKHOA" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="TENKHOA" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="sp_GetAllStudent_Result">
+    <Property Type="String" Name="MASV" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="HOVATEN" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="GIOITINH" Nullable="true" />
+    <Property Type="DateTime" Name="NGAYSINH" Nullable="true" />
+    <Property Type="String" Name="LOP" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MAKHOA" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HOCKY" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MONHOC" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DIEMTHILAN1" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTRUNGBINH" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTONGKET" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HANHKIEM" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="TENKHOA" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="sp_GetAllStudent1_Result">
+    <Property Type="String" Name="MASV" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="HOVATEN" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="GIOITINH" Nullable="true" />
+    <Property Type="DateTime" Name="NGAYSINH" Nullable="true" />
+    <Property Type="String" Name="LOP" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HOCKY" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MONHOC" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DIEMTHILAN1" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTRUNGBINH" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTONGKET" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HANHKIEM" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="TENKHOA" Nullable="true" MaxLength="100" />
+    <Property Type="Binary" Name="ANH" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+  <ComplexType Name="sp_GetKhoaIf_Result">
+    <Property Type="String" Name="MAKHOA" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="TENKHOA" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_TimkiemSinhvien_Result">
+    <Property Type="String" Name="MASV" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="HOVATEN" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="GIOITINH" Nullable="true" />
+    <Property Type="DateTime" Name="NGAYSINH" Nullable="true" />
+    <Property Type="String" Name="LOP" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MAKHOA" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HOCKY" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MONHOC" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DIEMTHILAN1" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTRUNGBINH" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="DIEMTONGKET" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HANHKIEM" Nullable="true" MaxLength="10" />
+  </ComplexType>
+  <ComplexType Name="sp_TimkiemTenKhoa_Result">
+    <Property Type="String" Name="MAKHOA" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="TENKHOA" Nullable="true" MaxLength="100" />
+  </ComplexType>
+</Schema>
